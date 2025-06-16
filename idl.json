@@ -1,0 +1,114 @@
+{
+  "version": "0.1.0",
+  "name": "note_taking",
+  "instructions": [
+    {
+      "name": "createNote",
+      "accounts": [
+        { "name": "note", "isMut": true, "isSigner": false },
+        { "name": "author", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "title", "type": "string" },
+        { "name": "content", "type": "string" }
+      ]
+    },
+    {
+      "name": "updateNote",
+      "accounts": [
+        { "name": "note", "isMut": true, "isSigner": false },
+        { "name": "author", "isMut": false, "isSigner": true }
+      ],
+      "args": [
+        { "name": "title", "type": { "option": "string" } },
+        { "name": "content", "type": { "option": "string" } }
+      ]
+    },
+    {
+      "name": "deleteNote",
+      "accounts": [
+        { "name": "note", "isMut": true, "isSigner": false },
+        { "name": "author", "isMut": true, "isSigner": true }
+      ],
+      "args": []
+    },
+    {
+      "name": "getNote",
+      "accounts": [{ "name": "note", "isMut": false, "isSigner": false }],
+      "args": [],
+      "returns": { "defined": "NoteData" }
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Note",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "author", "type": "publicKey" },
+          { "name": "title", "type": "string" },
+          { "name": "content", "type": "string" },
+          { "name": "createdAt", "type": "i64" },
+          { "name": "lastUpdated", "type": "i64" },
+          { "name": "bump", "type": "u8" }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "NoteData",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "author", "type": "publicKey" },
+          { "name": "title", "type": "string" },
+          { "name": "content", "type": "string" },
+          { "name": "createdAt", "type": "i64" },
+          { "name": "lastUpdated", "type": "i64" }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "NoteCreated",
+      "fields": [
+        { "name": "notePubkey", "type": "publicKey", "index": false },
+        { "name": "author", "type": "publicKey", "index": false },
+        { "name": "title", "type": "string", "index": false },
+        { "name": "createdAt", "type": "i64", "index": false }
+      ]
+    },
+    {
+      "name": "NoteUpdated",
+      "fields": [
+        { "name": "notePubkey", "type": "publicKey", "index": false },
+        { "name": "author", "type": "publicKey", "index": false },
+        { "name": "title", "type": "string", "index": false },
+        { "name": "lastUpdated", "type": "i64", "index": false }
+      ]
+    },
+    {
+      "name": "NoteDeleted",
+      "fields": [
+        { "name": "notePubkey", "type": "publicKey", "index": false },
+        { "name": "author", "type": "publicKey", "index": false }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "TitleTooLong",
+      "msg": "Title cannot be longer than 100 characters"
+    },
+    {
+      "code": 6001,
+      "name": "ContentTooLong",
+      "msg": "Content cannot be longer than 1000 characters"
+    },
+    { "code": 6002, "name": "TitleEmpty", "msg": "Title cannot be empty" }
+  ]
+}
